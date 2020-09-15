@@ -18,7 +18,7 @@ class Api::V1::UsersController < ApplicationController
       render json: user, status: :ok
     
     else 
-      render json: {msg: "User not added"}, status: :unprocessable_entity
+      render json: {msg: "User not added", error: user.errors}, status: :unprocessable_entity
     end
 
   end
@@ -37,7 +37,7 @@ class Api::V1::UsersController < ApplicationController
       if @user.update(userparams)
         render json: @user,status: :ok
       else
-        render json: { msg: "User not updated" }, status: :unprocessable_entity
+        render json: { msg: "User not updated", error: @user.errors }, status: :unprocessable_entity
       end
       
     else
