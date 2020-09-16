@@ -1,7 +1,12 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :getUser, only: [:updateUser, :deleteUser, :showUser]
+  before_action :get_user, only: [:update_user, :delete_user, :show_user]
+  before_action  only: [:update_user, :delete_user] do
+    check_token
+  end
 
-  def getUsers
+ 
+
+  def get_users
     users = User.all
     if users
       render json: users, status: :ok
@@ -11,9 +16,9 @@ class Api::V1::UsersController < ApplicationController
 
   end
 
-  def addUser
+  def add_user
     user = User.new(userparams)
-    
+    user.type = 2
     if user.save()
       render json: user, status: :ok
     
@@ -23,7 +28,7 @@ class Api::V1::UsersController < ApplicationController
 
   end
 
-  def showUser
+  def show_user
     if @user
         render json: @user,status: :ok      
     else
@@ -32,7 +37,7 @@ class Api::V1::UsersController < ApplicationController
   end
   
 
-  def updateUser
+  def update_user
     if @user
       if @user.update(userparams)
         render json: @user,status: :ok
@@ -45,7 +50,7 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
-  def deleteUser
+  def delete_user
     if @user
       if @user.destroy()
         render json: @user,status: :ok
@@ -65,7 +70,7 @@ class Api::V1::UsersController < ApplicationController
       params.permit(:username, :email, :password)
     end
     
-    def getUser
+    def get_user
       @user = User.find(params[:id])
     end
     
